@@ -19,46 +19,37 @@ def dissolve_level(
     using rules defined in dissolve_rules.yaml.
     """
 
+    # ---------------- Resolve level columns ----------------
     level_cols = rules["levels"][level_name]
     weight_col = rules["weights"]["default"]
     variable_rules = rules["variables"]
 
+    # ---------------- Build aggregation dictionary ----------------
     agg_dict = {}
 
-    # ---- Build aggregation dictionary ----
     for group_name, vars_in_group in variable_rules.items():
         for var, rule in vars_in_group.items():
 
-            # Skip variables that are already the grouping keys (they'll be present after groupby)
+            # Skip aggregating dissolve-by columns (they are used for grouping and
+            # will be present in the result already)
             if var in level_cols:
                 continue
 
             # Simple aggregations
-            if rule == "sum" or rule == "first":
+            if rule in ("sum", "first"):
                 agg_dict[var] = rule
 
             # Weighted mean aggregations
             elif isinstance(rule, dict) and rule.get("method") == "weighted_mean":
-                # Use weights if available, otherwise fall back to unweighted mean
-                if weight_col in gdf.columns:
-                    agg_dict[var] = lambda x, v=var: weighted_mean(
-                        x,
-                        gdf.loc[x.index, weight_col]
-                    )
-                else:
-                    # fall back to simple mean if weights are missing
-                    agg_dict[var] = lambda x, v=var: x.mean()
-                    print(f"⚠️ weight column '{weight_col}' not found; using unweighted mean for '{var}'")
+                agg_dict[var] = lambda x, v=var: weighted_mean(
+                    x,
+                    gdf.loc[x.index, weight_col]
+                )
 
-    # Filter agg_dict to variables that actually exist in gdf to avoid KeyError
-    existing_cols = set(gdf.columns)
-    valid_agg_dict = {k: v for k, v in agg_dict.items() if k in existing_cols}
-    missing = sorted(set(agg_dict) - set(valid_agg_dict))
-    if missing:
-        print(f"⚠️ The following variables are not present in the GeoDataFrame and will be skipped: {missing}")
-    agg_dict = valid_agg_dict
+    # Keep dissolve-by columns (they are required for grouping).
+    # Do not drop them before calling dissolve.
 
-    # ---- Dissolve geometry and attributes ----
+    # ---------------- Dissolve geometry and attributes ----------------
     dissolved = gdf.dissolve(
         by=level_cols,
         aggfunc=agg_dict,

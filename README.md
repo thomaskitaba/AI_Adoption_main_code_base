@@ -264,3 +264,10 @@ DISSOLVE BY ["region"]
           │
           ▼
 Region AI Adoption GeoJSON
+
+
+
+6. 
+Note: CRS stands for Coordinate Reference System.
+Common Standards to be used:
+The text mentions EPSG:4326. This is the most common coordinate system in the world (used by GPS and Google Earth). It uses latitude and longitude to represent locations on a spherical model of the Earth (WGS84).
