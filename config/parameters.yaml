@@ -1,0 +1,24 @@
+# Demographics
+age:
+  mean: 45
+  std: 12
+  min: 18
+  max: 80
+
+education_distribution:
+  None: 0.45
+  Primary: 0.35
+  Secondary: 0.15
+  Diploma+: 0.05
+
+# Technology access
+smartphone_penetration: 0.35
+electricity_access: 0.40
+
+# Adoption model weights (LOGIT)
+logit_weights:
+  education: 0.8
+  extension: 0.6
+  credit: 0.5
+  distance: -0.08
+  smartphone: 0.7

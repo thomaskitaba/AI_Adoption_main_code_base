@@ -1,0 +1,44 @@
+# ================================
+# Aggregation Rules for AI Adoption
+# ================================
+
+# ---- TARGET VARIABLES (Adoption Rates) ----
+ai_crop_advisory_adoption: mean
+ai_livestock_advisory_adoption: mean
+ai_driven_technology_adoption: mean
+
+# ---- DEMOGRAPHICS ----
+age: mean
+age_squared: mean
+household_size: mean
+num_degree_holders_household: mean
+farming_experience_years: mean
+sex: mode
+
+# ---- EDUCATION & AWARENESS ----
+farmer_education_level: mode
+ai_awareness_level: mode
+
+# ---- FARM CHARACTERISTICS ----
+land_size_ha: mean
+soil_fertility_status: mode
+land_slope_category: mode
+livestock_ownership: mode
+
+# ---- ACCESS & INFRASTRUCTURE ----
+distance_to_market_km: mean
+travel_time_to_extension: mean
+credit_access: mean
+financial_constraint: mean
+land_tenure_security: mean
+extension_access: mean
+non_farm_income: mean
+farmer_group_membership: mean
+extension_contact_frequency: mode
+
+# ---- AI TECHNOLOGY ATTRIBUTES ----
+ai_trial_available: mean
+ai_labor_saving: mean
+ai_feedback_speed: mode
+ai_technology_type: mode
+ai_category: mode

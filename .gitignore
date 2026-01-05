@@ -1,0 +1,51 @@
+# ============================
+# Python
+# ============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.env
+.venv/
+venv/
+
+# ============================
+# Jupyter
+# ============================
+.ipynb_checkpoints/
+
+# ============================
+# OS / Editor
+# ============================
+.DS_Store
+Thumbs.db
+.vscode/
+
+# ============================
+# LARGE DATA FILES (IGNORE)
+# ============================
+
+# Raw geospatial data (very large)
+data/raw/
+!data/raw/.gitkeep
+
+# Interim generated datasets
+data/interim/
+!data/interim/.gitkeep
+
+# Processed outputs (maps, joins, ML-ready data)
+data/processed/
+!data/processed/.gitkeep
+
+# Logs / temp
+logs/
+tmp/
+
+# ============================
+# Model Artifacts (optional)
+# ============================
+models/
+checkpoints/
+

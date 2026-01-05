@@ -1,0 +1,27 @@
+# ============================
+# Global Pipeline Configuration
+# ============================
+
+data:
+  geojson:
+    full: data/raw/geo/Ethiopia_AdminBoundaries_No_SNNPR.geojson
+    sample: data/raw/geo/Ethiopia_Admin_boundaries_sample.geojson
+
+  farmer_output_full: data/interim/farmers_synthetic.csv
+  farmer_output_sample: data/interim/farmers_synthetic_sample.csv
+
+  aggregation_outputs:
+    kebele: data/interim/kebele_aggregated.csv
+    woreda: data/interim/woreda_aggregated.csv
+    zone: data/interim/zone_aggregated.csv
+    region: data/interim/region_aggregated.csv
+  
+  geospatial_outputs:
+    kebele: data/processed/kebele_ai_adoption.geojson
+
+aggregation:
+  chunk_size: 200000
+
+run_mode:
+  use_sample: true   # 🔁 TRUE = sample GeoJSON, FALSE = full GeoJSON
+

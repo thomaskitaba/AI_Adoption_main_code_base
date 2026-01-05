@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Project name
+PROJECT_NAME="AI_Adoption_main_code_base"
+
+echo "Creating project structure: $PROJECT_NAME"
+
+# Create root project directory
+mkdir -p "$PROJECT_NAME"
+cd "$PROJECT_NAME" || exit 1
+
+# ------------------------
+# Configuration
+# ------------------------
+mkdir -p config
+
+# ------------------------
+# Data directories
+# ------------------------
+mkdir -p data/raw/geo
+mkdir -p data/raw/literature
+mkdir -p data/interim
+mkdir -p data/final
+
+# ------------------------
+# Source code
+# ------------------------
+mkdir -p src/data_generation
+mkdir -p src/aggregation
+mkdir -p src/geospatial
+mkdir -p src/validation
+mkdir -p src/visualization
+
+# ------------------------
+# Notebooks
+# ------------------------
+mkdir -p notebooks
+
+# ------------------------
+# Outputs
+# ------------------------
+mkdir -p outputs/figures
+mkdir -p outputs/tables
+mkdir -p outputs/logs
+
+# ------------------------
+# Base project files
+# ------------------------
+touch README.md
+touch requirements.txt
+touch .gitignore
+
+echo "Project structure created successfully."
+

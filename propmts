@@ -1,0 +1,236 @@
+beofre we go further note that join_engine.py has been changed to "import geopandas as gpd
+import pandas as pd
+
+def kebele_geospatial_join(
+    kebele_geojson_path: str,
+    kebele_aggregated_csv: str,
+):
+    import geopandas as gpd
+    import pandas as pd
+
+    gdf = gpd.read_file(kebele_geojson_path)
+
+    gdf = gdf.rename(columns={
+        "R_NAME": "region",
+        "Z_NAME": "zone",
+        "W_NAME": "woreda",
+        "KK_NAME": "kebele"
+    })
+
+    # Ensure kebele exists in GeoDataFrame — fallback to other name fields or synthesize
+    gdf['kebele'] = gdf.get('kebele', '').fillna('').astype(str).str.strip()
+    for alt in ['T_NAME', 'UK_NAME', 'RK_NAME']:
+        if alt in gdf.columns:
+            mask = gdf['kebele'] == ''
+            if mask.any():
+                gdf.loc[mask, 'kebele'] = gdf.loc[mask, alt].fillna('').astype(str).str.strip()
+
+    mask = gdf['kebele'].astype(str).str.strip() == ''
+    if mask.any():
+        gdf.loc[mask, 'kebele'] = gdf.loc[mask].apply(
+            lambda r: f"{r['woreda']}_unk_{r.name}", axis=1
+        )
+
+    df = pd.read_csv(kebele_aggregated_csv)
+
+    join_keys = ["region", "zone", "woreda", "kebele"]
+    for col in join_keys:
+        if col not in gdf.columns or col not in df.columns:
+            raise KeyError(f"Missing join column: {col}")
+
+    gdf_joined = gdf.merge(
+        df,
+        on=join_keys,
+        how="left",
+        validate="1:1"
+    )
+
+    return gdf_joined
+
+
+def join_kebele_attributes(
+    kebele_geojson_path: str,
+    kebele_aggregated_csv: str,
+    join_key: str | None = None,
+):
+    """Join kebele attributes from a CSV to a GeoDataFrame.
+
+    If `join_key` is provided and exists in both the GeoDataFrame and the
+    aggregated CSV, perform a simple single-column join using that key.
+    Otherwise fall back to the original composite join on
+    ["region", "zone", "woreda", "kebele"].
+    """
+    # Read inputs
+    gdf = gpd.read_file(kebele_geojson_path)
+    df = pd.read_csv(kebele_aggregated_csv)
+
+    # Normalize column names in geojson to expected names
+    gdf = gdf.rename(columns={
+        "R_NAME": "region",
+        "Z_NAME": "zone",
+        "W_NAME": "woreda",
+        "KK_NAME": "kebele"
+    })
+
+    # Normalize kebele in GeoDataFrame to match generation strategy (fallbacks)
+    gdf['kebele'] = gdf.get('kebele', '').fillna('').astype(str).str.strip()
+    for alt in ['T_NAME', 'UK_NAME', 'RK_NAME']:
+        if alt in gdf.columns:
+            mask = gdf['kebele'] == ''
+            if mask.any():
+                gdf.loc[mask, 'kebele'] = gdf.loc[mask, alt].fillna('').astype(str).str.strip()
+
+    mask = gdf['kebele'].astype(str).str.strip() == ''
+    if mask.any():
+        gdf.loc[mask, 'kebele'] = gdf.loc[mask].apply(
+            lambda r: f"{r['woreda']}_unk_{r.name}", axis=1
+        )
+
+    # Attempt single-key join if requested and available
+    if join_key:
+        if join_key in gdf.columns and join_key in df.columns:
+            gdf_joined = gdf.merge(
+                df,
+                on=join_key,
+                how="left",
+                validate="1:1"
+            )
+            return gdf_joined
+        else:
+            print(f"⚠️ join_key '{join_key}' not found in both datasets. Falling back to composite regional keys.")
+
+    # Fallback to composite join (re-uses the checks implemented above)
+    return kebele_geospatial_join(kebele_geojson_path, kebele_aggregated_csv)"and "generate_farmers has been changed to this "  import numpy as np
+import pandas as pd
+import geopandas as gpd
+
+from .adoption_model import adoption_probability
+from .utils import bounded_normal, categorical
+
+np.random.seed(42)
+
+def generate_farmers(kebele_geojson_path):
+    kebeles = gpd.read_file(kebele_geojson_path)
+
+    # standardize column names
+    kebeles = kebeles.rename(columns={
+    'R_NAME': 'region',
+    'Z_NAME': 'zone',
+    'W_NAME': 'woreda',
+    'KK_NAME': 'kebele'
+})
+
+    # Ensure kebele is populated — fallback to other name fields or synthesize
+    kebeles['kebele'] = kebeles.get('kebele', '').fillna('').astype(str).str.strip()
+    for alt in ['T_NAME', 'UK_NAME', 'RK_NAME']:
+        if alt in kebeles.columns:
+            mask = kebeles['kebele'] == ''
+            if mask.any():
+                kebeles.loc[mask, 'kebele'] = kebeles.loc[mask, alt].fillna('').astype(str).str.strip()
+
+    # For any remaining empty kebeles, synthesize a unique identifier using woreda and index
+    mask = kebeles['kebele'].astype(str).str.strip() == ''
+    if mask.any():
+        kebeles.loc[mask, 'kebele'] = kebeles.loc[mask].apply(
+            lambda r: f"{r['woreda']}_unk_{r.name}", axis=1
+        )
+
+    farmers = []
+    print(kebeles.head())
+    print(kebeles.columns)
+
+    for _, k in kebeles.iterrows():
+        n = np.random.randint(80, 150)
+
+        for i in range(n):
+            age = int(bounded_normal(45, 12, 18, 80))
+
+            farmer = {
+                # ---- IDENTIFICATION ----
+                "study_id": f"{k['kebele']}_{i}",
+                "source_reference": "Synthetic_AgTechAdoption",
+                "country": "Ethiopia",
+
+                # ---- AI TECHNOLOGY ----
+                "ai_technology_type": categorical(
+                    ["Crop AI", "Livestock AI", "Integrated AI"],
+                    [0.4, 0.3, 0.3]
+                ),
+                "ai_category": categorical(
+                    ["IV", "NRM", "Package"],
+                    [0.4, 0.4, 0.2]
+                ),
+                "ai_feedback_speed": categorical(
+                    ["Short", "Medium", "Long"],
+                    [0.4, 0.4, 0.2]
+                ),
+                "ai_trial_available": np.random.binomial(1, 0.5),
+                "ai_labor_saving": np.random.binomial(1, 0.6),
+
+                # ---- LOCATION ----
+                "region": k['region'],
+                "zone": k['zone'],
+                "woreda": k['woreda'],
+                "kebele": k['kebele'],
+
+                # ---- DEMOGRAPHICS ----
+                "age": age,
+                "age_squared": age ** 2,
+                "sex": categorical(["Male", "Female"], [0.75, 0.25]),
+                "household_size": np.random.randint(2, 9),
+
+                # ---- EDUCATION ----
+                "farmer_education_level": categorical(
+                    ["None", "Primary", "Secondary", "Diploma+"],
+                    [0.45, 0.35, 0.15, 0.05]
+                ),
+                "ai_awareness_level": categorical(
+                    ["Low", "Medium", "High"],
+                    [0.4, 0.4, 0.2]
+                ),
+                "num_degree_holders_household": np.random.choice([0,1,2,3], p=[0.6,0.25,0.1,0.05]),
+
+                # ---- FARM ----
+                "farming_experience_years": max(age - 15, 1),
+                "land_size_ha": round(np.random.lognormal(0.6, 0.6), 2),
+                "soil_fertility_status": categorical(
+                    ["Poor", "Moderate", "Fertile"],
+                    [0.3, 0.4, 0.3]
+                ),
+                "land_slope_category": categorical(
+                    ["Flat", "Gentle", "Steep"],
+                    [0.4, 0.4, 0.2]
+                ),
+
+                # ---- ACCESS ----
+                "distance_to_market_km": round(np.random.exponential(6), 1),
+                "travel_time_to_extension": round(np.random.exponential(1.5), 1),
+                "credit_access": np.random.binomial(1, 0.45),
+                "financial_constraint": np.random.binomial(1, 0.4),
+                "land_tenure_security": np.random.binomial(1, 0.7),
+                "livestock_ownership": categorical(
+                    ["None", "Low", "Medium", "High"],
+                    [0.2, 0.4, 0.25, 0.15]
+                ),
+                "non_farm_income": np.random.binomial(1, 0.35),
+                "extension_access": np.random.binomial(1, 0.55),
+                "extension_contact_frequency": categorical(
+                    ["None", "Rare", "Occasional", "Frequent"],
+                    [0.3, 0.3, 0.25, 0.15]
+                ),
+                "farmer_group_membership": np.random.binomial(1, 0.4),
+            }
+
+            # ---- ADOPTION ----
+            p = adoption_probability(farmer)
+            farmer["ai_crop_advisory_adoption"] = np.random.binomial(1, p)
+            farmer["ai_livestock_advisory_adoption"] = np.random.binomial(1, p * 0.8)
+            farmer["ai_driven_technology_adoption"] = int(
+                farmer["ai_crop_advisory_adoption"] or
+                farmer["ai_livestock_advisory_adoption"]
+            )
+
+            farmers.append(farmer)
+
+    return pd.DataFrame(farmers)
+ "

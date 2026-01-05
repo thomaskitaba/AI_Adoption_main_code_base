@@ -1,0 +1,9 @@
+numpy
+pandas
+geopandas
+pyyaml
+shapely
+matplotlib
+seaborn
+scikit-learn
+
