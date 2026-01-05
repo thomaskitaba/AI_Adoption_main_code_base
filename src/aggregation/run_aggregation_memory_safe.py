@@ -40,6 +40,9 @@ def run_aggregation_memory_safe(
                     .agg(agg_dict)
                     .reset_index()
                 )
+                # Add group size as num_farmers for weighting/dissolve steps
+                sizes = region_df.groupby(group_cols).size().reset_index(name="num_farmers")
+                agg = agg.merge(sizes, on=group_cols, how="left")
                 results.append(agg)
 
         final = pd.concat(results)

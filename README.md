@@ -230,3 +230,37 @@ src/aggregation/run_aggregation_memory_safe.py
     └─ written to:
             data/processed/kebele_ai_adoption.geojson
 # AI_Adoption_main_code_base
+
+
+
+
+
+
+5. Dissolve: 
+
+Geometry Dissolve means:  mergin keble level polygons to form woreds. based on shared attributes while combininig their data correctly.
+
+
+Kebele GeoJSON
+   + aggregated indicators
+          │
+          ▼
+Kebele AI Adoption GeoJSON  (already done)
+          │
+          ▼
+DISSOLVE BY ["region","zone","woreda"]
+          │
+          ▼
+Woreda AI Adoption GeoJSON
+          │
+          ▼
+DISSOLVE BY ["region","zone"]
+          │
+          ▼
+Zone AI Adoption GeoJSON
+          │
+          ▼
+DISSOLVE BY ["region"]
+          │
+          ▼
+Region AI Adoption GeoJSON

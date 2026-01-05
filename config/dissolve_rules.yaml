@@ -1,0 +1,45 @@
+# config/dissolve_rules.yaml
+
+levels:
+  woreda: ["region", "zone", "woreda"]
+  zone: ["region", "zone"]
+  region: ["region"]
+
+weights:
+  default: num_farmers
+
+variables:
+
+  identifiers:
+    region: first
+    zone: first
+    woreda: first
+
+  counts:
+    num_farmers: sum
+
+  adoption_rates:
+    ai_crop_advisory_adoption:
+      method: weighted_mean
+    ai_livestock_advisory_adoption:
+      method: weighted_mean
+    ai_driven_technology_adoption:
+      method: weighted_mean
+
+  farm_characteristics:
+    land_size_ha:
+      method: weighted_mean
+    farming_experience_years:
+      method: weighted_mean
+
+  access_indicators:
+    credit_access:
+      method: weighted_mean
+    extension_access:
+      method: weighted_mean
+
+  distances:
+    distance_to_market_km:
+      method: weighted_mean
+    travel_time_to_extension:
+      method: weighted_mean
