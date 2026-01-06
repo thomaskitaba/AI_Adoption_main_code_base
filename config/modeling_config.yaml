@@ -1,0 +1,25 @@
+modeling:
+  level: woreda
+
+  data:
+    input_csv: data/ai_ready/woreda_ai_features.csv
+
+  features:
+    - credit_access_rate
+    - extension_access_rate
+    - avg_travel_time_to_extension
+    - avg_land_size_ha
+    - avg_farming_experience_years
+    - avg_distance_to_market_km
+
+  target: ai_driven_technology_adoption_rate
+
+  logit:
+    max_iter: 200
+    solver: lbfgs
+
+  random_forest:
+    n_estimators: 300
+    max_depth: 10
+    random_state: 42
+
