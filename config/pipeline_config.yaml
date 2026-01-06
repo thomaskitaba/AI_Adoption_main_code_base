@@ -25,3 +25,13 @@ aggregation:
 run_mode:
   use_sample: true   # 🔁 TRUE = sample GeoJSON, FALSE = full GeoJSON
 
+preprocessing:
+  # Configuration for handling missing values across pipelines. Users can choose
+  # to drop rows with missing features (`drop`) or impute missing feature values
+  # (`impute`). The imputer settings are passed to sklearn.impute.SimpleImputer.
+  missing_values:
+    strategy: impute   # "drop" | "impute"
+    imputer:
+      strategy: median       # SimpleImputer strategies: "mean", "median", "most_frequent", "constant"
+      fill_value: null       # used if strategy == "constant"
+

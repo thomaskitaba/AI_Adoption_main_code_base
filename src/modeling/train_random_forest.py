@@ -2,11 +2,13 @@ import pandas as pd
 import yaml
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.dummy import DummyClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
 from pathlib import Path
 import joblib
 
 
-def train_rf_model(csv_path, model_path, config_path="config/modeling_config.yaml"):
+def train_rf_model(csv_path, model_path, preprocessing=None, config_path="config/modeling_config.yaml"):
     with open(config_path) as f:
         config = yaml.safe_load(f)["modeling"]
 
@@ -16,11 +18,20 @@ def train_rf_model(csv_path, model_path, config_path="config/modeling_config.yam
 
     df = pd.read_csv(csv_path)
 
-    # Drop rows with missing features or target
-    df = df.dropna(subset=FEATURES + [TARGET])
-    if df.shape[0] == 0:
-        raise ValueError("No training rows remain after dropping missing values. Check input CSV and preprocessing steps.")
+    # Default preprocessing config
+    preprocessing = preprocessing or {"strategy": "drop"}
+    strategy = preprocessing.get("strategy", "drop")
+    imputer_cfg = preprocessing.get("imputer", {})
 
+    # Always drop rows with missing target values
+    df = df.dropna(subset=[TARGET])
+
+    if strategy == "drop":
+        df = df.dropna(subset=FEATURES)
+        if df.shape[0] == 0:
+            raise ValueError("No training rows remain after dropping missing values. Check input CSV and preprocessing steps.")
+
+    # Prepare X and y
     X = df[FEATURES]
     y = (df[TARGET] > 0.5).astype(int)
 
@@ -28,7 +39,13 @@ def train_rf_model(csv_path, model_path, config_path="config/modeling_config.yam
         print("⚠ Only one class present in target; training a DummyClassifier that predicts the majority class for RF fallback.")
         model = DummyClassifier(strategy="most_frequent")
     else:
-        model = RandomForestClassifier(**rf_cfg)
+        if strategy == "impute":
+            imputer_strategy = imputer_cfg.get("strategy", "median")
+            fill_value = imputer_cfg.get("fill_value", None)
+            imputer = SimpleImputer(strategy=imputer_strategy, fill_value=fill_value)
+            model = Pipeline([("imputer", imputer), ("rf", RandomForestClassifier(**rf_cfg))])
+        else:
+            model = RandomForestClassifier(**rf_cfg)
 
     model.fit(X, y)
 
