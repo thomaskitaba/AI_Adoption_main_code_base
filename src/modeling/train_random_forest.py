@@ -1,33 +1,37 @@
 import pandas as pd
+import yaml
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.dummy import DummyClassifier
 from pathlib import Path
 import joblib
 
-TARGET = "ai_driven_technology_adoption_rate"
 
-FEATURES = [
-    "credit_access_rate",
-    "extension_access_rate",
-    "avg_travel_time_to_extension",
-    "avg_land_size_ha",
-    "avg_farming_experience_years",
-    "avg_distance_to_market_km"
-]
+def train_rf_model(csv_path, model_path, config_path="config/modeling_config.yaml"):
+    with open(config_path) as f:
+        config = yaml.safe_load(f)["modeling"]
 
+    FEATURES = config["features"]
+    TARGET = config["target"]
+    rf_cfg = config["random_forest"]
 
-def train_rf_model(csv_path, model_path):
     df = pd.read_csv(csv_path)
+
+    # Drop rows with missing features or target
+    df = df.dropna(subset=FEATURES + [TARGET])
+    if df.shape[0] == 0:
+        raise ValueError("No training rows remain after dropping missing values. Check input CSV and preprocessing steps.")
 
     X = df[FEATURES]
     y = (df[TARGET] > 0.5).astype(int)
 
-    model = RandomForestClassifier(
-        n_estimators=300,
-        max_depth=10,
-        random_state=42
-    )
+    if y.nunique() < 2:
+        print("⚠ Only one class present in target; training a DummyClassifier that predicts the majority class for RF fallback.")
+        model = DummyClassifier(strategy="most_frequent")
+    else:
+        model = RandomForestClassifier(**rf_cfg)
 
     model.fit(X, y)
+
     Path(model_path).parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, model_path)
 
