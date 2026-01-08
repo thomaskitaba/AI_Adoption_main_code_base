@@ -19,3 +19,4 @@ def run_aggregation_pipeline():
         outputs=outputs,
         chunk_size=chunk_size
     )
+    #
