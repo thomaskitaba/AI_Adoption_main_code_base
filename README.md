@@ -14,6 +14,7 @@ Raw Data Discovery
 → AI-Ready Dataset
 → Visualization & Policy Simulation
 
+
 ***Pipeline Commands:
 
 python run_pipeline.py <stage>
@@ -271,3 +272,5 @@ Region AI Adoption GeoJSON
 Note: CRS stands for Coordinate Reference System.
 Common Standards to be used:
 The text mentions EPSG:4326. This is the most common coordinate system in the world (used by GPS and Google Earth). It uses latitude and longitude to represent locations on a spherical model of the Earth (WGS84).
+
+
