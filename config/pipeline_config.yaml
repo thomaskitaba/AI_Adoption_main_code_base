@@ -4,7 +4,7 @@
 
 data:
   geojson:
-    full: data/raw/geo/Ethiopia_AdminBoundaries_No_SNNPR.geojson
+    full: data/raw/geo/Ethiopia_AdminBoundaries.geojson
     sample: data/raw/geo/Ethiopia_Admin_boundaries_sample.geojson
 
   farmer_output_full: data/interim/farmers_synthetic.csv
