@@ -9,6 +9,8 @@ from src.modeling.policy_simulation import run_policy_simulation
 from src.policy_mapping.pipeline import run_policy_mapping
 from src.modeling.policy_analysis import run_policy_analysis
 from src.policy_analysis.pipeline import run_policy_comparison
+from src.policy_equity.pipeline import run_policy_equity
+
 
 
 
@@ -34,9 +36,10 @@ def main(stage):
         run_policy_analysis()
     elif stage == "policy_map":
         run_policy_mapping()
-    elif stage == "policy_analysis":
+    elif stage == "policy_comparison":
         run_policy_comparison()
-    
+    elif stage == "policy_equity":
+        run_policy_equity()
     
 
 
@@ -50,10 +53,11 @@ def main(stage):
         run_policy_mapping()
         run_policy_analysis()
         run_policy_comparison()
+        run_policy_equity()
 
     else:
         raise ValueError(
-            "Usage: python run_pipeline.py [generate|aggregate|all|geospatial|ai_ready|model]"
+            "Usage: python run_pipeline.py [generate|aggregate|all|geospatial|ai_ready|model|policy|policy_map|policy_analysis|policy_comparison|policy_equity]"
         )
 
 if __name__ == "__main__":
