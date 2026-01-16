@@ -1,0 +1,8 @@
+scenario,level,mean_policy_effect,median_policy_effect,pct_positive,max_effect,min_effect
+baseline,woreda,0.0,0.0,0.0,0.0,0.0
+extension_reform,woreda,0.0,0.0,0.0,0.0,0.0
+credit_reform,woreda,0.0,0.0,0.0,0.0,0.0
+education_investment,woreda,0.0,0.0,0.0,0.0,0.0
+market_infrastructure,woreda,0.0,0.0,0.0,0.0,0.0
+land_tenure_reform,woreda,0.0,0.0,0.0,0.0,0.0
+full_transformation_package,woreda,0.0,0.0,0.0,0.0,0.0

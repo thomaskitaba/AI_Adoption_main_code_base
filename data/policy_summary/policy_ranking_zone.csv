@@ -1,0 +1,8 @@
+scenario,level,mean_policy_effect,median_policy_effect,pct_positive,max_effect,min_effect
+baseline,zone,0.0,0.0,0.0,0.0,0.0
+extension_reform,zone,0.0,0.0,0.0,0.0,0.0
+credit_reform,zone,0.0,0.0,0.0,0.0,0.0
+education_investment,zone,0.0,0.0,0.0,0.0,0.0
+market_infrastructure,zone,0.0,0.0,0.0,0.0,0.0
+land_tenure_reform,zone,0.0,0.0,0.0,0.0,0.0
+full_transformation_package,zone,0.0,0.0,0.0,0.0,0.0

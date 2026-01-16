@@ -6,6 +6,10 @@ from src.geospatial.pipeline import run_geospatial_pipeline
 from src.ai_ready.run import run_ai_ready_pipeline
 from src.modeling.run import run_modeling_pipeline
 from src.modeling.policy_simulation import run_policy_simulation
+from src.policy_mapping.pipeline import run_policy_mapping
+from src.policy_analysis.pipeline import run_policy_comparison
+
+
 
 def main(stage):
     print(f"Running pipeline stage: {stage}")
@@ -13,9 +17,7 @@ def main(stage):
         run_generation_pipeline()
     elif stage == "aggregate":
         run_aggregation_pipeline()
-    elif stage == "all":
-        run_generation_pipeline()
-        run_aggregation_pipeline()
+
     elif stage == "geospatial":
         run_geospatial_pipeline()
 
@@ -27,6 +29,12 @@ def main(stage):
     
     elif stage == "policy":
         run_policy_simulation()
+    elif stage == "policy_map":
+        run_policy_mapping()
+    elif stage == "policy_analysis":
+        run_policy_comparison()
+    
+    
 
 
     elif stage == "all":
@@ -35,6 +43,9 @@ def main(stage):
         run_geospatial_pipeline()
         run_ai_ready_pipeline()
         run_modeling_pipeline()
+        run_policy_simulation()
+        run_policy_mapping()
+        run_policy_comparison()
 
     else:
         raise ValueError(
