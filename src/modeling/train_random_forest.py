@@ -1,7 +1,7 @@
 import pandas as pd
 import yaml
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.dummy import DummyClassifier
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.dummy import DummyRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from pathlib import Path
@@ -33,19 +33,19 @@ def train_rf_model(csv_path, model_path, preprocessing=None, config_path="config
 
     # Prepare X and y
     X = df[FEATURES]
-    y = (df[TARGET] > 0.5).astype(int)
+    y = df[TARGET]
 
     if y.nunique() < 2:
-        print("⚠ Only one class present in target; training a DummyClassifier that predicts the majority class for RF fallback.")
-        model = DummyClassifier(strategy="most_frequent")
+        print("⚠ Only one unique value in target; training a DummyRegressor that predicts the mean for RF fallback.")
+        model = DummyRegressor(strategy="mean")
     else:
         if strategy == "impute":
             imputer_strategy = imputer_cfg.get("strategy", "median")
             fill_value = imputer_cfg.get("fill_value", None)
             imputer = SimpleImputer(strategy=imputer_strategy, fill_value=fill_value)
-            model = Pipeline([("imputer", imputer), ("rf", RandomForestClassifier(**rf_cfg))])
+            model = Pipeline([("imputer", imputer), ("rf", RandomForestRegressor(**rf_cfg))])
         else:
-            model = RandomForestClassifier(**rf_cfg)
+            model = RandomForestRegressor(**rf_cfg)
 
     model.fit(X, y)
 

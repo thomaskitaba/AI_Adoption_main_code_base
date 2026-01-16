@@ -1,8 +1,7 @@
 scenario,level,mean_policy_effect,median_policy_effect,pct_positive,max_effect,min_effect
-baseline,woreda,0.0,0.0,0.0,0.0,0.0
-extension_reform,woreda,0.0,0.0,0.0,0.0,0.0
-credit_reform,woreda,0.0,0.0,0.0,0.0,0.0
+extension_reform,woreda,0.10981556851210883,0.1117139567241624,1.0,0.1565878158028837,0.0491203583692071
+credit_reform,woreda,-0.022272898490451838,-0.0220718949341685,0.0,-0.0151428306840774,-0.0306203444483283
 education_investment,woreda,0.0,0.0,0.0,0.0,0.0
-market_infrastructure,woreda,0.0,0.0,0.0,0.0,0.0
+market_infrastructure,woreda,0.009268318025848942,0.0089396128071163,1.0,0.0154883633338437,0.0062835913817832
 land_tenure_reform,woreda,0.0,0.0,0.0,0.0,0.0
-full_transformation_package,woreda,0.0,0.0,0.0,0.0,0.0
+full_transformation_package,woreda,0.09681098804750592,0.0985816745971102,1.0,0.1374212068438282,0.0371730411674356

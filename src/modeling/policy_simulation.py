@@ -8,6 +8,7 @@ import numpy as np
 def _positive_prob(m, X):
     """
     Robustly extract positive-class probability from sklearn models or Pipelines.
+    For regression models, return clipped predictions.
     """
     if hasattr(m, "predict_proba"):
         probs = m.predict_proba(X)
@@ -33,8 +34,9 @@ def _positive_prob(m, X):
             return probs[:, 1]
         return probs[:, 0]
 
-    # No predict_proba → fallback to predict
-    return np.asarray(m.predict(X), dtype=float)
+    # No predict_proba → assume regression, return clipped predict
+    preds = np.asarray(m.predict(X), dtype=float)
+    return np.clip(preds, 0, 1)
 
 
 def run_policy_simulation(config_path="config/policy_simulation.yaml"):

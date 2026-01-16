@@ -1,8 +1,7 @@
 scenario,level,mean_policy_effect,median_policy_effect,pct_positive,max_effect,min_effect
-baseline,region,0.0,0.0,0.0,0.0,0.0
-extension_reform,region,0.0,0.0,0.0,0.0,0.0
-credit_reform,region,0.0,0.0,0.0,0.0,0.0
+extension_reform,region,0.14362241372002996,0.147436903825849,1.0,0.1638988892186982,0.1109865712782726
+credit_reform,region,0.0846247131662939,0.0842818965604168,1.0,0.1068196193858886,0.0610514330983938
 education_investment,region,0.0,0.0,0.0,0.0,0.0
-market_infrastructure,region,0.0,0.0,0.0,0.0,0.0
+market_infrastructure,region,-0.09679905577037361,-0.0954308972113296,0.0,-0.0861973938308423,-0.1150337764599309
 land_tenure_reform,region,0.0,0.0,0.0,0.0,0.0
-full_transformation_package,region,0.0,0.0,0.0,0.0,0.0
+full_transformation_package,region,0.1314480711159502,0.1331529211168232,1.0,0.1549013813438604,0.0957862506175049

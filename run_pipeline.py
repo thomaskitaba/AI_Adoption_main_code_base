@@ -7,6 +7,7 @@ from src.ai_ready.run import run_ai_ready_pipeline
 from src.modeling.run import run_modeling_pipeline
 from src.modeling.policy_simulation import run_policy_simulation
 from src.policy_mapping.pipeline import run_policy_mapping
+from src.modeling.policy_analysis import run_policy_analysis
 from src.policy_analysis.pipeline import run_policy_comparison
 
 
@@ -29,6 +30,8 @@ def main(stage):
     
     elif stage == "policy":
         run_policy_simulation()
+    elif stage == "policy_analysis":
+        run_policy_analysis()
     elif stage == "policy_map":
         run_policy_mapping()
     elif stage == "policy_analysis":
@@ -45,6 +48,7 @@ def main(stage):
         run_modeling_pipeline()
         run_policy_simulation()
         run_policy_mapping()
+        run_policy_analysis()
         run_policy_comparison()
 
     else:
