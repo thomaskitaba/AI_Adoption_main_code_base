@@ -5,6 +5,7 @@ from src.aggregation.pipeline import run_aggregation_pipeline
 from src.geospatial.pipeline import run_geospatial_pipeline
 from src.ai_ready.run import run_ai_ready_pipeline
 from src.modeling.run import run_modeling_pipeline
+from src.modeling.policy_simulation import run_policy_simulation
 
 def main(stage):
     print(f"Running pipeline stage: {stage}")
@@ -23,6 +24,10 @@ def main(stage):
 
     elif stage == "model":
         run_modeling_pipeline()
+    
+    elif stage == "policy":
+        run_policy_simulation()
+
 
     elif stage == "all":
         run_generation_pipeline()

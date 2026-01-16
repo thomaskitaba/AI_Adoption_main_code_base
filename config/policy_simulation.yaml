@@ -1,0 +1,61 @@
+policy_simulation:
+
+  levels:
+    woreda:
+      model_path: models/logit_woreda.pkl
+      ai_ready_csv: data/ai_ready/woreda_ai_features.csv
+
+    zone:
+      model_path: models/logit_zone.pkl
+      ai_ready_csv: data/ai_ready/zone_ai_features.csv
+
+    region:
+      model_path: models/logit_region.pkl
+      ai_ready_csv: data/ai_ready/region_ai_features.csv
+
+  output:
+    directory: data/policy_outputs
+
+  scenarios:
+
+    baseline:
+      description: Status quo (no intervention)
+      changes: {}
+
+    extension_reform:
+      description: Expanded extension services
+      changes:
+        extension_access_rate: 0.80
+        avg_travel_time_to_extension: 0.50
+
+    credit_reform:
+      description: Improved access to credit
+      changes:
+        credit_access_rate: 0.70
+
+    education_investment:
+      description: Improved farmer education
+      changes:
+        avg_farmer_education_years: 8.0
+
+    market_infrastructure:
+      description: Improved market access
+      changes:
+        avg_distance_to_market_km: 3.0
+
+    land_tenure_reform:
+      description: Improved land tenure security
+      changes:
+        land_tenure_security_rate: 0.85
+
+    full_transformation_package:
+      description: Coordinated multi-sector reform
+      changes:
+        extension_access_rate: 0.80
+        avg_travel_time_to_extension: 0.50
+        credit_access_rate: 0.70
+        ai_awareness_rate: 0.75
+        avg_farmer_education_years: 8.0
+        farmer_group_membership_rate: 0.65
+        avg_distance_to_market_km: 3.0
+        land_tenure_security_rate: 0.85
